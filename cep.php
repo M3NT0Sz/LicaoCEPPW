@@ -1,6 +1,9 @@
 <?php
     error_reporting(0);
+    $find = " ";
+    $replace = "";
     $cep = $_POST['cep'];
+    $cep = str_replace($find, $replace, $cep);
 
     $url = "https://viacep.com.br/ws/$cep/json";
     $ch = curl_init($url);

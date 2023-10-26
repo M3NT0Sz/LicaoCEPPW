@@ -35,26 +35,57 @@
         }else if($_POST['Cadastrar']){
             ?>
     <form action="#" method="post">
-        Nome:<input type="text" name="nome">
-        Sobrenome:<input type="text" name="sobrenome">
-        <input type="submit" value="Continuar" name="Continuar1">
+        <div class="continuarcont">
+        <div class="continuar1">
+            <h1>Cadastrar</h1>
+            <div class="nomecont1">
+            <h3>Nome<input type="text" name="nome" required></h3>
+        </div>
+        <div class="nomecont1">
+            <h3>Sobrenome<input type="text" name="sobrenome" required></h3>
+        </div>
+            <input type="submit" value="Continuar" name="Continuar1" class="btncont1">
+        </div>
+        </div>
     </form>
     <?php
         }else if($_POST['Continuar1']){
 ?>
+    <div class="continuarcont">
+    <div class="continuar2">
     <form action="#" method="post">
-        <h3>Digite o CEP para consultar: </h3>
-        <div class="procura">
-            <input type="text" class="cep" name="cep" placeholder="Digite um cep">
-            <input type="submit" value="Procurar" name="Continuar1">
+        <h3>Digite o CEP para consultar</h3>
+        <div class="nomecont1">
+            <h3><input type="text" class="cep" name="cep" placeholder="Digite um cep"></h3>
+            <input type="submit" value="Procurar" name="Continuar1" class="btncont1">
         </div>
-        Rua:<input type="text" name="rua" value="<?php echo $resultado->logradouro;?>">
-        Bairro:<input type="text" name="bairro" value="<?php echo $resultado->bairro; ?>">
-        Cidade:<input type="text" name="cidade" value="<?php echo $resultado->localidade; ?>">
-        Estado:<input type="text" name="estado" value="<?php echo $resultado->uf; ?>">
-        <input type="submit" value="Continuar" name="Continuar2">
     </form>
+    <form action="#" method="post">
+        <div class="nomecont2">
+        <div class="nomecont1">
+        <h3>Rua<input type="text" name="rua" value="<?php echo $resultado->logradouro;?>" required></h3>
+        </div>
+        <div class="nomecont1">
+        <h3>Bairro<input type="text" name="bairro" value="<?php echo $resultado->bairro; ?>" required></h3>
+        </div>
+        </div>
+        <div class="nomecont2">
+        <div class="nomecont1">
+        <h3>Cidade<input type="text" name="cidade" value="<?php echo $resultado->localidade; ?>" required></h3>
+        </div>
+        <div class="nomecont1">
+        <h3>Estado<input type="text" name="estado" value="<?php echo $resultado->uf; ?>" required></h3>
+        </div>
+        </div>
+        <input type="submit" value="Continuar" name="Continuar2" class="btncont1">
+    </form>
+    </div>
+    </div>
     <?php
+        }else if($_POST['Continuar2']){
+            ?>
+            Batatao
+            <?php
         }
     ?>
 </body>
