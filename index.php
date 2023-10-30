@@ -7,7 +7,7 @@ if ($_POST['Continuar1']) {
     $nome = $_POST['nome'];
     $sobrenome = $_POST['sobrenome'];
     $email = $_POST['email'];
-    $senha = md5($_POST['sobrenome']);
+    $senha = md5(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING));
     $_SESSION['usu1'][] = array(
         'nome' => $nome,
         'sobrenome' => $sobrenome,
@@ -159,16 +159,16 @@ if ($_POST['Continuar1']) {
         }
     } else if ($_POST['Entrar2']) {
         $email = $_POST['email'];
-        $senha = md5($_POST['senha']);
+        $senha = md5(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING));
         $sql = "SELECT * FROM usuario WHERE usu_email = '$email' and usu_senha = '$senha'";
         $result = mysqli_query($conn, $sql);
         $row_usuario = mysqli_fetch_array($result);
         if (mysqli_num_rows($result) == 1) {
-            $_SESSION['TudoTudo'] = "Erro";
-            header("Location: index.php");
-        } else {
             $_SESSION['TudoTudo'] = "Perfil";
             $_SESSION['Usuario'] = "<center>" . $row_usuario['usu_nome'] . " " . $row_usuario['usu_sobrenome'] . "</center>";
+            header("Location: index.php");
+        } else {
+            $_SESSION['TudoTudo'] = "Erro";
             header("Location: index.php");
         }
     } else if ($_SESSION['TudoTudo'] == "Perfil") {
