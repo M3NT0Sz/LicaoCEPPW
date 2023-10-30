@@ -6,14 +6,22 @@ include_once("cep.php");
 if ($_POST['Continuar1']) {
     $nome = $_POST['nome'];
     $sobrenome = $_POST['sobrenome'];
-    $cep = $_POST['cep'];
+    $email = $_POST['email'];
+    $senha = md5($_POST['sobrenome']);
     $_SESSION['usu1'][] = array(
         'nome' => $nome,
-        'sobrenome' => $sobrenome
+        'sobrenome' => $sobrenome,
+        'email' => $email,
+        'senha' => $senha
     );
+    unset($_SESSION['usu2']);
 }
 if ($_POST['Continuar1']) {
     $cep = $_POST['cep'];
+    $find = " ";
+    $replace = "";
+    $cep = $_POST['cep'];
+    $cep = str_replace($find, $replace, $cep);
     $_SESSION['usu2'][] = array(
         'cep' => $cep
     );
@@ -37,7 +45,7 @@ if ($_POST['Continuar1']) {
                     <input type="submit" value="Inicio" class="botaoletras" name="Inicio">
                 </div>
                 <div class="container-letras">
-                    <input type="submit" value="Cadastrar" class="botaoletras" name="Cadastrar">
+                    <input type="submit" value="Entrar" class="botaoletras" name="Entrar">
                 </div>
             </div>
         </div>
@@ -47,17 +55,48 @@ if ($_POST['Continuar1']) {
     ?>
         Batata
     <?php
+    } else if ($_POST['Entrar'] || $_SESSION['TudoTudo'] == "Erro") {
+        unset($_SESSION['TudoTudo']);
+    ?>
+        <div class="continuarcont">
+            <div class="login">
+                <h1>Login</h1>
+                <form action="#" method="post">
+                    <div class="nomecont1">
+                        <h3>Email<input type="email" name="email"></h3>
+                    </div>
+                    <div class="nomecont1">
+                        <h3>Senha<input type="password" name="senha"></h3>
+                    </div>
+                    <input type="submit" value="Entrar" name="Entrar2" class="btncont1">
+                </form>
+                <form action="#" method="post">
+                    <input type="submit" value="Cadastrar" name="Cadastrar" class="btncont1">
+                </form>
+            </div>
+        </div>
+    <?php
     } else if ($_POST['Cadastrar']) {
     ?>
         <form action="#" method="post">
             <div class="continuarcont">
                 <div class="continuar1">
                     <h1>Cadastrar</h1>
-                    <div class="nomecont1">
-                        <h3>Nome<input type="text" name="nome" required></h3>
+                    <div class="nomecont2">
+                        <div class="nomecont1">
+                            <h3>Email<input type="email" name="email" required></h3>
+                        </div>
+                        <div class="nomecont1">
+                            <h3>Nome<input type="text" name="nome" required></h3>
+                        </div>
                     </div>
-                    <div class="nomecont1">
-                        <h3>Sobrenome<input type="text" name="sobrenome" required></h3>
+                    <div class="nomecont2">
+                        <div class="nomecont1">
+                            <h3>Sobrenome<input type="text" name="sobrenome" required></h3>
+                        </div>
+                        <div class="nomecont1">
+                            <h3>Senha<input type="password" name="senha" required></h3>
+                        </div>
                     </div>
                     <input type="submit" value="Continuar" name="Continuar1" class="btncont1">
                 </div>
@@ -104,8 +143,10 @@ if ($_POST['Continuar1']) {
         $estado = $_POST['estado'];
         $nome = $_SESSION['usu1'][0]['nome'];
         $sobrenome = $_SESSION['usu1'][0]['sobrenome'];
+        $email = $_SESSION['usu1'][0]['email'];
+        $senha = $_SESSION['usu1'][0]['senha'];
         $cep = $_SESSION['usu2'][0]['cep'];
-        $sql = "insert into usuario (usu_nome, usu_sobrenome, usu_cep, usu_rua, usu_bairro, usu_cidade, usu_estado) values ('$nome', '$sobrenome', '$cep', '$rua', '$bairro', '$cidade', '$estado')";
+        $sql = "insert into usuario (usu_nome, usu_sobrenome, usu_cep, usu_rua, usu_bairro, usu_cidade, usu_estado, usu_email, usu_senha) values ('$nome', '$sobrenome', '$cep', '$rua', '$bairro', '$cidade', '$estado', '$email', '$senha')";
         $comando = mysqli_query($conn, $sql);
         if (mysqli_insert_id($conn)) {
             unset($_SESSION['usu1']);
@@ -116,6 +157,26 @@ if ($_POST['Continuar1']) {
             unset($_SESSION['usu2']);
             header("Location: index.php");
         }
+    } else if ($_POST['Entrar2']) {
+        $email = $_POST['email'];
+        $senha = md5($_POST['senha']);
+        $sql = "SELECT * FROM usuario WHERE usu_email = '$email' and usu_senha = '$senha'";
+        $result = mysqli_query($conn, $sql);
+        $row_usuario = mysqli_fetch_array($result);
+        if (mysqli_num_rows($result) == 1) {
+            $_SESSION['TudoTudo'] = "Erro";
+            header("Location: index.php");
+        } else {
+            $_SESSION['TudoTudo'] = "Perfil";
+            $_SESSION['Usuario'] = "<center>" . $row_usuario['usu_nome'] . " " . $row_usuario['usu_sobrenome'] . "</center>";
+            header("Location: index.php");
+        }
+    } else if ($_SESSION['TudoTudo'] == "Perfil") {
+        unset($_SESSION['TudoTudo']);
+        echo $_SESSION['Usuario'];
+    ?>
+
+    <?php
     }
     ?>
 </body>
