@@ -135,7 +135,7 @@ if ($_POST['Continuar1']) {
                 </form>
             </div>
         </div>
-    <?php
+        <?php
     } else if ($_POST['Continuar2']) {
         $rua = $_POST['rua'];
         $bairro = $_POST['bairro'];
@@ -164,6 +164,7 @@ if ($_POST['Continuar1']) {
         $result = mysqli_query($conn, $sql);
         $row_usuario = mysqli_fetch_array($result);
         if (mysqli_num_rows($result) == 1) {
+            $_SESSION['codusu'] = $row_usuario['usu_cod'];
             $_SESSION['TudoTudo'] = "Perfil";
             $_SESSION['Usuario'] = "<center>" . $row_usuario['usu_nome'] . " " . $row_usuario['usu_sobrenome'] . "</center>";
             header("Location: index.php");
@@ -171,11 +172,103 @@ if ($_POST['Continuar1']) {
             $_SESSION['TudoTudo'] = "Erro";
             header("Location: index.php");
         }
+    } else if ($_POST['Editar']) {
+        $cod = $_SESSION['codusu'];
+        $usuar = "SELECT * FROM usuario WHERE usu_cod = '$cod'";
+        $usucod = mysqli_query($conn, $usuar);
+        while ($row = mysqli_fetch_array($usucod)) {
+            $nome = $row['usu_nome'];
+            $email = $row['usu_email'];
+            $sobrenome = $row['usu_sobrenome'];
+        ?>
+            <form action="#" method="post">
+                <div class="continuarcont">
+                    <div class="continuar1">
+                        <h1>Editar</h1>
+                        <div class="nomecont2">
+                            <div class="nomecont1">
+                                <h3>Email<input type="email" name="email" value="<?php echo $email; ?>" required></h3>
+                            </div>
+                            <div class="nomecont1">
+                                <h3>Nome<input type="text" name="nome" value="<?php echo $nome; ?>" required></h3>
+                            </div>
+                        </div>
+                        <div class="nomecont2">
+                            <div class="nomecont1">
+                                <h3>Sobrenome<input type="text" name="sobrenome" value="<?php echo $sobrenome; ?>" required></h3>
+                            </div>
+                        </div>
+                        <input type="submit" value="Continuar" name="Continuar1Edit" class="btncont1">
+                    </div>
+                </div>
+            </form>
+        <?php
+        }
+    } else if ($_POST['Continuar1Edit']) {
+        $nome = $_POST['nome'];
+        $sobrenome = $_POST['sobrenome'];
+        $email = $_POST['email'];
+        $cod = $_SESSION['codusu'];
+        $sql = "UPDATE usuario SET usu_nome = '$nome', usu_sobrenome = '$sobrenome', usu_email = '$email' WHERE usu_cod = '$cod'";
+        $comando = mysqli_query($conn, $sql);
+        $cod = $_SESSION['codusu'];
+        $usuar = "SELECT * FROM usuario WHERE usu_cod = '$cod'";
+        $usucod = mysqli_query($conn, $usuar);
+        while ($row = mysqli_fetch_array($usucod)) {
+            $cep = $row['usu_cep'];
+            $rua = $row['usu_rua'];
+            $bairro = $row['usu_bairro'];
+            $cidade = $row['usu_cidade'];
+            $estado = $row['usu_estado'];
+        ?>
+            <div class="continuarcont">
+                <div class="continuar2">
+                    <form action="#" method="post">
+                        <div class="nomecont2">
+                            <div class="nomecont1">
+                                <h3>CEP<input type="text" class="cep" name="cep" value="<?php echo $cep; ?>" placeholder="Digite um cep"></h3>
+                            </div>
+                        </div>
+                        <div class="nomecont2">
+                            <div class="nomecont1">
+                                <h3>Rua<input type="text" name="rua" value="<?php echo $rua; ?>" required></h3>
+                            </div>
+                            <div class="nomecont1">
+                                <h3>Bairro<input type="text" name="bairro" value="<?php echo $bairro; ?>" required></h3>
+                            </div>
+                        </div>
+                        <div class="nomecont2">
+                            <div class="nomecont1">
+                                <h3>Cidade<input type="text" name="cidade" value="<?php echo $cidade; ?>" required></h3>
+                            </div>
+                            <div class="nomecont1">
+                                <h3>Estado<input type="text" name="estado" value="<?php echo $estado; ?>" required></h3>
+                            </div>
+                        </div>
+                        <input type="submit" value="Continuar" name="Continuar2Edit" class="btncont1">
+                    </form>
+                </div>
+            </div>
+        <?php
+        }
+    } else if ($_POST['Continuar2Edit']) {
+        $cod = $_SESSION['codusu'];
+        $cep = $_POST['cep'];
+        $rua = $_POST['rua'];
+        $bairro = $_POST['bairro'];
+        $cidade = $_POST['cidade'];
+        $estado = $_POST['estado'];
+        $sql = "UPDATE usuario SET usu_cep = '$cep', usu_rua = '$rua', usu_bairro = '$bairro', usu_cidade = '$cidade', usu_estado = '$estado' WHERE usu_cod = '$cod'";
+        $comando = mysqli_query($conn, $sql);
+        ?>
+
+    <?php
     } else if ($_SESSION['TudoTudo'] == "Perfil") {
-        unset($_SESSION['TudoTudo']);
         echo $_SESSION['Usuario'];
     ?>
-
+        <form action="#" method="post">
+            <input type="submit" value="Editar" name="Editar" class="btncont1">
+        </form>
     <?php
     }
     ?>
