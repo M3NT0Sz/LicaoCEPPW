@@ -51,11 +51,7 @@ if ($_POST['Continuar1']) {
         </div>
     </form>
     <?php
-    if ($_POST['Inicio']) {
-    ?>
-        Batata
-    <?php
-    } else if ($_POST['Entrar'] || $_SESSION['TudoTudo'] == "Erro") {
+    if ($_POST['Entrar'] || $_POST['Inicio'] || $_SESSION['TudoTudo'] == "Erro") {
         unset($_SESSION['TudoTudo']);
     ?>
         <div class="continuarcont">
@@ -131,6 +127,9 @@ if ($_POST['Continuar1']) {
                             <h3>Estado<input type="text" name="estado" value="<?php echo $resultado->uf; ?>" required></h3>
                         </div>
                     </div>
+                    <div class="nomecont1">
+                        <h3>Numero da casa<input type="text" name="numero" required></h3>
+                    </div>
                     <input type="submit" value="Continuar" name="Continuar2" class="btncont1">
                 </form>
             </div>
@@ -141,12 +140,13 @@ if ($_POST['Continuar1']) {
         $bairro = $_POST['bairro'];
         $cidade = $_POST['cidade'];
         $estado = $_POST['estado'];
+        $numero = $_POST['numero'];
         $nome = $_SESSION['usu1'][0]['nome'];
         $sobrenome = $_SESSION['usu1'][0]['sobrenome'];
         $email = $_SESSION['usu1'][0]['email'];
         $senha = $_SESSION['usu1'][0]['senha'];
         $cep = $_SESSION['usu2'][0]['cep'];
-        $sql = "insert into usuario (usu_nome, usu_sobrenome, usu_cep, usu_rua, usu_bairro, usu_cidade, usu_estado, usu_email, usu_senha) values ('$nome', '$sobrenome', '$cep', '$rua', '$bairro', '$cidade', '$estado', '$email', '$senha')";
+        $sql = "insert into usuario (usu_nome, usu_sobrenome, usu_cep, usu_rua, usu_bairro, usu_cidade, usu_estado, usu_email, usu_senha, usu_num) values ('$nome', '$sobrenome', '$cep', '$rua', '$bairro', '$cidade', '$estado', '$email', '$senha', '$numero')";
         $comando = mysqli_query($conn, $sql);
         if (mysqli_insert_id($conn)) {
             unset($_SESSION['usu1']);
@@ -264,12 +264,79 @@ if ($_POST['Continuar1']) {
 
     <?php
     } else if ($_SESSION['TudoTudo'] == "Perfil") {
-        echo $_SESSION['Usuario'];
     ?>
-        <form action="#" method="post">
-            <input type="submit" value="Editar" name="Editar" class="btncont1">
-        </form>
+    <center>
+    <h1 style="font-size: 40px; margin: 20px;">Consultar</h1>
+    </center>
+        <div class="algo3">
+        <?php
+            $usuario = "SELECT * FROM usuario";
+            $comando = mysqli_query($conn, $usuario);
+            while ($row = mysqli_fetch_array($comando)) {
+                $email = $row['usu_email']; 
+                $nome = $row['usu_nome']; 
+                $sobrenome = $row['usu_sobrenome']; 
+                $cep = $row['usu_cep']; 
+                $rua = $row['usu_rua']; 
+                $bairro = $row['usu_bairro']; 
+                $estado = $row['usu_estado']; 
+                $cidade = $row['usu_cidade']; 
+                $numero = $row['usu_num'];
+                ?>
+                <div class="algo">
+                    <div class="algo2">
+                    <h3>Email:</h3> <?php echo $email; ?>
+                    </div>
+                    <div class="algo2">
+                    <h3>Nome:</h3> <?php echo $nome; ?>
+            </div>
+                    <div class="algo2">
+                    <h3>Sobrenome:</h3> <?php echo $sobrenome; ?>
+            </div>
+                    <div class="algo2">
+                    <h3>CEP:</h3> <?php echo $cep; ?>
+            </div>
+                    <div class="algo2">
+                    <h3>Rua:</h3> <?php echo $rua; ?>
+            </div>
+                    <div class="algo2">
+                    <h3>Bairro:</h3> <?php echo $bairro; ?>
+            </div>
+                    <div class="algo2">
+                    <h3>Estado:</h3> <?php echo $estado; ?>
+            </div>
+                    <div class="algo2">
+                    <h3>Cidade:</h3> <?php echo $cidade; ?>
+            </div>
+                    <div class="algo2">
+                    <h3>Numero da Casa:</h3> <?php echo $numero; ?>
+            </div>
+                </div>
+                <?php
+            }
+        ?>
+        </div>
     <?php
+    }else{
+        ?>
+        <div class="continuarcont">
+            <div class="login">
+                <h1>Login</h1>
+                <form action="#" method="post">
+                    <div class="nomecont1">
+                        <h3>Email<input type="email" name="email"></h3>
+                    </div>
+                    <div class="nomecont1">
+                        <h3>Senha<input type="password" name="senha"></h3>
+                    </div>
+                    <input type="submit" value="Entrar" name="Entrar2" class="btncont1">
+                </form>
+                <form action="#" method="post">
+                    <input type="submit" value="Cadastrar" name="Cadastrar" class="btncont1">
+                </form>
+            </div>
+        </div>
+        <?php
     }
     ?>
 </body>

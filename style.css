@@ -121,3 +121,26 @@
 .login > h1{
     font-size: 35px;
 }
+
+.algo{
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    height: auto;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 0 10px 0 brown;
+}
+
+.algo2{
+    width: auto;
+}
+
+.algo3{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
